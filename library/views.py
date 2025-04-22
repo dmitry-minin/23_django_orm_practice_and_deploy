@@ -11,6 +11,10 @@ class BookListView(ListView):
     template_name = 'library/books_list.html'
     context_object_name = 'books'
 
+    def get_queryset(self):
+        query_set = super().get_queryset()
+        return query_set.filter(publication_date__year__gt=2000)
+
 
 class BookCreateView(CreateView):
     model = Book
@@ -23,6 +27,11 @@ class BookDetailView(DetailView):
     model = Book
     template_name = 'library/book_detail.html'
     context_object_name = 'book'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['author_books_count'] = Book.objects.filter(author=self.object.author).count()
+        return context
 
 
 class BookUpdateView(UpdateView):
@@ -38,17 +47,3 @@ class BookDeleteView(DeleteView):
     context_object_name = 'book'
     success_url = reverse_lazy('library:books_list')
 
-# def books_list(request):
-#     books = Book.objects.all()
-#     context = {
-#         'books': books
-#     }
-#     return render(request, 'library/books_list.html', context=context)
-#
-#
-# def books_detail(request, book_id):
-#     book = Book.objects.get(id=book_id)
-#     context = {
-#         'book': book
-#     }
-#     return render(request, 'library/book_detail.html', context=context)
