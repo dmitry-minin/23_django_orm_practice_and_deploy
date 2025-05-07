@@ -7,12 +7,48 @@ class BookForm(forms.ModelForm):
         model = Book
         fields = ['title', 'publication_date', 'author']
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.fields['title'].widget.attrs.update({
+            'class': 'form-control',
+            'placeholder': 'Введите название книги'
+        })
+
+        self.fields['publication_date'].widget.attrs.update({
+            'class': 'form-control',
+            'type': 'date',
+            'placeholder': 'Введите дату публикации'
+        })
+
+        self.fields['author'].widget.attrs.update({
+            'class': 'form-control'
+        })
+
 
 class AuthorForm(forms.ModelForm):
     class Meta:
         model = Author
         fields = ['first_name', 'last_name', 'birth_date']
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.fields['first_name'].widget.attrs.update({
+            'class': 'form-control',
+            'placeholder': 'Введите имя'
+        })
+
+        self.fields['last_name'].widget.attrs.update({
+            'class': 'form-control',
+            'placeholder': 'Введите фамилию'
+        })
+
+        self.fields['birth_date'].widget.attrs.update({
+            'class': 'form-control',
+            'placeholder': 'Введите дату рождения',
+            'type': 'date'
+        })
 
     def clean(self):
         cleaned_data = super().clean()
