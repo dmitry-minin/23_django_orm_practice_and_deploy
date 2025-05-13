@@ -4,9 +4,10 @@ from users.models import CustomUser
 
 
 class CustomUserCreationForm(UserCreationForm):
-    phone_number = forms.CharField(max_length=150, required=False, help_text='Введите номер телефона*'
+    phone_number = forms.CharField(max_length=150, required=False, help_text='Введите номер телефона* '
                                                                              'Поле не является обязательным',)
     username = forms.CharField(max_length=50, required=True)
+
 
     class Meta:
         model = CustomUser
