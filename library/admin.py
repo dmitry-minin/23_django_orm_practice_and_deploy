@@ -16,3 +16,10 @@ class BookAdmin(admin.ModelAdmin):
     list_filter = ('publication_date', 'author')
     search_fields = ('title', 'author__first_name', 'author__last_name')
 
+
+@admin.register(CustomUser)
+class CustomUserAdmin(admin.ModelAdmin):
+    list_display = ('email', 'username', 'first_name', 'last_name', 'is_staff')
+    search_fields = ('email', 'username', 'first_name', 'last_name')
+    list_filter = ('is_staff',)
+    ordering = ('username',)
