@@ -1,5 +1,6 @@
 from django.contrib import admin
 from library.models import Author, Book
+from users.models import CustomUser
 
 
 # admin.site.register(Author) вариант первый, ниже вариант 2
@@ -14,3 +15,4 @@ class BookAdmin(admin.ModelAdmin):
     list_display = ('title', 'publication_date', 'author')
     list_filter = ('publication_date', 'author')
     search_fields = ('title', 'author__first_name', 'author__last_name')
+
