@@ -4,6 +4,7 @@ from library.forms import BookForm, AuthorForm
 from library.models import Book, Author
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 class AuthorListView(ListView):
@@ -12,14 +13,14 @@ class AuthorListView(ListView):
     context_object_name = 'authors'
 
 
-class AuthorCreateView(CreateView):
+class AuthorCreateView(LoginRequiredMixin, CreateView):
     model = Author
     template_name = 'library/author_form.html'
     form_class = AuthorForm
     success_url = reverse_lazy('library:authors_list')
 
 
-class AuthorUpdateView(UpdateView):
+class AuthorUpdateView(LoginRequiredMixin, UpdateView):
     model = Author
     template_name = 'library/author_form.html'
     form_class = AuthorForm
@@ -36,7 +37,7 @@ class BookListView(ListView):
         return query_set.filter(publication_date__year__gt=2000)
 
 
-class BookCreateView(CreateView):
+class BookCreateView(LoginRequiredMixin, CreateView):
     model = Book
     template_name = 'library/book_form.html'
     form_class = BookForm
@@ -54,7 +55,7 @@ class BookDetailView(DetailView):
         return context
 
 
-class BookUpdateView(UpdateView):
+class BookUpdateView(LoginRequiredMixin, UpdateView):
     model = Book
     template_name = 'library/book_form.html'
     form_class = BookForm
