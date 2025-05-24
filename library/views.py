@@ -71,4 +71,3 @@ class BookDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     context_object_name = 'book'
     success_url = reverse_lazy('library:books_list')
     permission_required = 'library.delete_book'
-
