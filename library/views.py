@@ -11,6 +11,8 @@ from django.views.decorators.cache import cache_page
 from django.utils.decorators import method_decorator
 from django.core.cache import cache
 
+from library.services import BookService
+
 
 class ReviewBookView(LoginRequiredMixin, View):
     def post(self, request, pk):
@@ -84,7 +86,7 @@ class BookCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     permission_required = 'library.add_book'
 
 
-@method_decorator(cache_page(60 * 15), name='dispatch')
+# @method_decorator(cache_page(60 * 15), name='dispatch')
 class BookDetailView(LoginRequiredMixin, DetailView):
     model = Book
     template_name = 'library/book_detail.html'
@@ -93,6 +95,10 @@ class BookDetailView(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['author_books_count'] = Book.objects.filter(author=self.object.author).count()
+
+        book_id = self.object.id
+        context['average_rating'] = BookService.calculate_average_rating(book_id)
+        context['is_popular'] = BookService.is_popular(book_id)
         return context
 
 

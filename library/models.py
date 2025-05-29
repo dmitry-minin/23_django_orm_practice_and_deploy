@@ -35,3 +35,17 @@ class Book(models.Model):
             ('can_review_book', 'Can review book'),
             ('can_recommend_book', 'Can recommend book'),
         ]
+
+
+class Review(models.Model):
+    book = models.ForeignKey(Book, related_name='reviews', on_delete=models.CASCADE)
+    rating = models.PositiveIntegerField(blank=True, null=True, verbose_name='Rating')
+    comment = models.TextField(blank=True, null=True, verbose_name='Comment')
+
+    def __str__(self):
+        return f'Review for {self.book.title}'
+
+    class Meta:
+        verbose_name = 'рецензия'
+        verbose_name_plural = 'рецензии'
+        ordering = ['rating']

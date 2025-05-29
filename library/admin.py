@@ -1,5 +1,5 @@
 from django.contrib import admin
-from library.models import Author, Book
+from library.models import Author, Book, Review
 from users.models import CustomUser
 
 
@@ -23,3 +23,11 @@ class CustomUserAdmin(admin.ModelAdmin):
     search_fields = ('email', 'username', 'first_name', 'last_name')
     list_filter = ('is_staff',)
     ordering = ('username',)
+
+
+@admin.register(Review)
+class ReviewAdmin(admin.ModelAdmin):
+    list_display = ('book', 'rating', 'comment')
+    list_filter = ('rating',)
+    search_fields = ('book__title', 'comment')
+    ordering = ('-rating',)
