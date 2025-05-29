@@ -86,7 +86,7 @@ class BookCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     permission_required = 'library.add_book'
 
 
-# @method_decorator(cache_page(60 * 15), name='dispatch')
+@method_decorator(cache_page(60 * 15), name='dispatch')
 class BookDetailView(LoginRequiredMixin, DetailView):
     model = Book
     template_name = 'library/book_detail.html'
