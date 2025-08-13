@@ -113,14 +113,19 @@ jobs:
 
       - name: Deploy to server
         run: |
-          ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
+          ssh -i ~/.ssh/id_rsa -o IdentitiesOnly=yes -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
             set -e
+            # Choose docker command (fallback to sudo docker if needed)
+            DOCKER=docker
+            if ! $DOCKER info >/dev/null 2>&1; then
+              DOCKER="sudo docker"
+            fi
             # Login to Docker Hub (required for private repos)
-            echo ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }} | docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
-            docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }}
-            docker stop myapp || true
-            docker rm myapp || true
-            docker run -d --name myapp -p 80:8000 \
+            echo ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }} | $DOCKER login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
+            $DOCKER pull ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }}
+            $DOCKER stop myapp || true
+            $DOCKER rm myapp || true
+            $DOCKER run -d --name myapp -p 80:8000 \
               --env-file /opt/app/.env \
               ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }}
           EOF
