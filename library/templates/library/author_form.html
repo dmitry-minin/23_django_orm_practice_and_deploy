@@ -1,10 +1,10 @@
 {% extends 'library/base.html' %}
 
-{% block title %}Форма для книги{% endblock %}
+{% block title %}Форма для автора{% endblock %}
 
 {% block content %}
 {% include 'library/header.html' %}
-<h2>Форма для книги</h2>
+<h2>Форма для автора</h2>
 <form method="post">
     {% csrf_token %}
     {{ form.non_field_errors }}
